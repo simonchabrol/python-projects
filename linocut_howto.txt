@@ -1,0 +1,149 @@
+================================================================================
+ SKETCH FILTER — COMPLETE COMMAND REFERENCE
+ sketch_filter.py
+================================================================================
+
+
+REQUIRED DIRECTORY STRUCTURE
+--------------------------------------------------------------------------------
+
+    project/
+    ├── sketch_filter.py
+    ├── input_images/        ← place source photos here (jpg, png, bmp, tiff, webp)
+    └── output_sketchs/      ← generated automatically on first run
+
+
+INSTALLATION
+--------------------------------------------------------------------------------
+
+    pip install opencv-python numpy
+
+
+================================================================================
+ COMMANDS
+================================================================================
+
+
+── DEFAULT ──────────────────────────────────────────────────────────────────────
+
+    # Run with all defaults (linocut style, detail 1.0, contrast 1.2)
+    python sketch_filter.py
+
+
+── STYLES ───────────────────────────────────────────────────────────────────────
+
+    # Dense woodcut / linocut — high contrast, opaque black areas
+    # (closest to source examples)
+    python sketch_filter.py --style linocut
+
+    # Pencil sketch — fine lines on white background
+    python sketch_filter.py --style pencil
+
+    # Fine engraving — regular hatching, taille-douce feel
+    python sketch_filter.py --style engraving
+
+    # Printing negative — typographic plate effect, hard thresholding with inversion
+    python sketch_filter.py --style printing
+
+
+── INVERSION (swap black and white) ─────────────────────────────────────────────
+
+    # Applied as a final step — works with all styles
+    python sketch_filter.py --style linocut   --invert
+    python sketch_filter.py --style pencil    --invert
+    python sketch_filter.py --style engraving --invert
+    python sketch_filter.py --style printing  --invert
+
+
+── DETAIL LEVEL (0.5 – 2.0, default: 1.0) ──────────────────────────────────────
+
+    # Simplified — fewer details, broader strokes
+    python sketch_filter.py --detail 0.5
+
+    # Default level
+    python sketch_filter.py --detail 1.0
+
+    # Increased detail — recommended starting point for fine-textured images
+    python sketch_filter.py --detail 1.5
+
+    # Maximum detail — best for high-resolution images with rich texture
+    # (grass, fur, fabric)
+    python sketch_filter.py --detail 2.0
+
+
+── CONTRAST (0.5 – 2.0, default: 1.2) ──────────────────────────────────────────
+
+    # Reduced contrast — softer result, useful to compensate at high detail levels
+    python sketch_filter.py --contrast 1.0
+
+    # Default contrast
+    python sketch_filter.py --contrast 1.2
+
+    # Strong contrast — sharper black/white separation
+    python sketch_filter.py --contrast 1.5
+
+
+── CUSTOM DIRECTORIES ───────────────────────────────────────────────────────────
+
+    # Use non-default input and output folders
+    python sketch_filter.py --input my_photos --output my_sketchs
+
+
+── COMBINED EXAMPLES ────────────────────────────────────────────────────────────
+
+    # Printing style, inverted, moderate detail boost
+    python sketch_filter.py --style printing --invert --detail 1.5
+
+    # Printing style, inverted, maximum detail with contrast compensation
+    python sketch_filter.py --style printing --invert --detail 2.0 --contrast 1.0
+
+    # Linocut, high detail and contrast — ideal for landscape photography
+    python sketch_filter.py --style linocut --detail 1.5 --contrast 1.4
+
+    # Engraving, inverted, fine detail — close to a photographic negative
+    python sketch_filter.py --style engraving --invert --detail 1.5 --contrast 1.3
+
+    # Full combination with custom directories
+    python sketch_filter.py --style printing --invert --detail 1.5 --contrast 1.2 \
+        --input my_photos --output my_sketchs
+
+
+================================================================================
+ PARAMETER SUMMARY
+================================================================================
+
+    --style       linocut | pencil | engraving | printing    (default: linocut)
+                  Rendering style applied to all images in the input directory.
+
+    --invert      flag, no value required                     (default: off)
+                  Swaps black and white in the final output.
+                  Applied after contrast adjustment, compatible with all styles.
+
+    --detail      0.5 → 2.0                                   (default: 1.0)
+                  Controls the level of texture and micro-detail preserved.
+                  Above 1.8, noisy results may occur on low-resolution images;
+                  reduce --contrast to 1.0 or below to compensate.
+
+    --contrast    0.5 → 2.0                                   (default: 1.2)
+                  Final black/white separation applied after rendering.
+                  Increase for sharper output; decrease to soften high-detail runs.
+
+    --input       any folder path                             (default: input_images)
+                  Source directory. Accepts jpg, jpeg, png, bmp, tiff, tif, webp.
+
+    --output      any folder path                             (default: output_sketchs)
+                  Output directory. Created automatically if it does not exist.
+                  Output filenames match source filenames exactly.
+
+
+================================================================================
+ NOTES
+================================================================================
+
+    - All images found in the input directory are processed in a single run.
+    - Output filenames are identical to source filenames.
+    - The output directory is created automatically if it does not exist.
+    - Recommended combination for fine-textured archival photographs:
+          python sketch_filter.py --style printing --invert --detail 1.5 --contrast 1.2
+
+================================================================================
